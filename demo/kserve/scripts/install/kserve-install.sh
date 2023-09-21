@@ -60,13 +60,20 @@ then
   if [[ $input_target_op == "odh" || $input_target_op == "rhods" || $input_target_op == "brew" ]]
   then
     export TARGET_OPERATOR=$input_target_op
+    echo $input_target_op
+    echo "1==========================================="
+    echo $TARGET_OPERATOR
     export TARGET_OPERATOR_TYPE=$(getOpType $input_target_op)
+    echo "2==========================================="
+    echo $TARGET_OPERATOR_TYPE
   else 
     echo "[ERR] Only 'odh' or 'rhods' or 'brew' can be entered"
     exit 1
   fi
 else      
   export TARGET_OPERATOR_TYPE=$(getOpType $TARGET_OPERATOR)
+  echo "3==========================================="
+  echo $TARGET_OPERATOR_TYPE
 fi
 echo "${TARGET_OPERATOR_TYPE}"
 if [[ ${TARGET_OPERATOR} == 'brew' ]] && [[ ! -n "${BREW_TAG+x}" ]]
@@ -82,7 +89,11 @@ then
 fi
 
 export KSERVE_OPERATOR_NS=$(getKserveNS)
+echo "4==========================================="
+echo $KSERVE_OPERATOR_NS
 export TARGET_OPERATOR_NS=$(getOpNS ${TARGET_OPERATOR_TYPE})
+echo "5==========================================="
+echo $TARGET_OPERATOR_NS
 echo
 echo "Let's install KServe"
 
@@ -219,7 +230,7 @@ echo "[INFO] Deploy odh/rhods operator"
 echo
 if [[ ${TARGET_OPERATOR_TYPE} == "rhods" ]];
 then
-  oc create ns ${TARGET_OPERATOR_NS} -oyaml --dry-run=client | oc apply -f-  
+  oc create ns ${TARGET_OPERATOR_NS} -o yaml --dry-run=client | oc apply -f-  
   oc::wait::object::availability "oc get project ${TARGET_OPERATOR_NS} " 2 60
 fi
 oc create -f custom-manifests/opendatahub/${TARGET_OPERATOR}-operators-2.x.yaml
