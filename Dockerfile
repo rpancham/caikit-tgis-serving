@@ -28,7 +28,7 @@ COPY caikit.yml /caikit/config/caikit.yml
 
 ENV VIRTUAL_ENV=/caikit/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
+RUN /caikit/.venv/bin/pip install --no-cache-dir "fastapi==0.123.7" "starlette>=0.49.1,<0.51.0"
 RUN groupadd --system caikit --gid 1001 && \
     adduser --system --uid 1001 --gid 0 --groups caikit \
     --create-home --home-dir /caikit --shell /sbin/nologin \
