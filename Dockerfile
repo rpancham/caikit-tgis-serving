@@ -26,6 +26,8 @@ WORKDIR /caikit
 COPY --from=poetry-builder /caikit/.venv /caikit/.venv
 COPY caikit.yml /caikit/config/caikit.yml
 
+RUN /caikit/.venv/bin/pip install --no-cache-dir "urllib3>=2.6.0,<3"
+
 ENV VIRTUAL_ENV=/caikit/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
